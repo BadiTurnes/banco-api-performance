@@ -3,8 +3,15 @@ import { sleep, check } from 'k6';
 
 export const options = {
   // iterations: 50,
-  vus: 10,
-  duration: '30s',
+  // vus: 10,
+  // duration: '30s',
+  stages: [
+    { duration: '10s', target: 10 },
+    { duration: '20s', target: 10 },
+    { duration: '10s', target: 30 },
+    { duration: '20s', target: 30 },
+    { duration: '20s', target: 0 }
+  ],
   thresholds: {
     http_req_duration: ['p(90)<100','max<100'], // 90% das requisições devem ser concluídas em menos de 500ms
     http_req_failed: ['rate<0.01'], // Taxa de falhas deve ser menor que 1%    
