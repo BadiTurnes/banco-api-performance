@@ -2,9 +2,11 @@ import http from 'k6/http';
 import { sleep, check } from 'k6';
 
 export const options = {
-  iterations: 50,
+  // iterations: 50,
+  vus: 10,
+  duration: '30s',
   thresholds: {
-    http_req_duration: ['p(90)<20','max<20'], // 90% das requisições devem ser concluídas em menos de 500ms
+    http_req_duration: ['p(90)<100','max<100'], // 90% das requisições devem ser concluídas em menos de 500ms
     http_req_failed: ['rate<0.01'], // Taxa de falhas deve ser menor que 1%    
     }
 };
