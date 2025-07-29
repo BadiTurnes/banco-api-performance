@@ -1,0 +1,37 @@
+import http from 'k6/http';
+import { sleep, check } from 'k6';
+
+export const options = {
+  iterations: 50,
+  thresholds: {
+    http_req_duration: ['p(90)<20','max<20'], // 90% das requisições devem ser concluídas em menos de 500ms
+    http_req_failed: ['rate<0.01'], // Taxa de falhas deve ser menor que 1%    
+    }
+};
+
+export default function () {
+    const url = 'http://localhost:3000/login';
+
+    const payload = JSON.stringify({
+        username: 'julio.lima',
+        senha: '123456',
+    });
+
+    const params = {
+        headers: {
+        'Content-Type': 'application/json',
+        },
+    };
+
+    const res = http.post(url, payload, params);
+    //const resposta = http.post(url, payload, params);
+    //console.log(resposta)
+
+    check(res, {
+        'Validar que o Status 200': (r) => r.status === 200,
+        'Validar que o Token é string': (r) => typeof(r.json().token) == 'string'
+    });
+
+    sleep(1);
+
+}
